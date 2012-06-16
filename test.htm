@@ -1,0 +1,103 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" >
+<head runat="server" >
+  <title>Just Test</title>
+  <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.16/themes/ui-lightness/jquery-ui.css"/>
+  <script src="http://www.google.com/jsapi"></script>
+  <script>
+    google.load("jquery","1.7.1");
+    google.load("jqueryui","1.8.16");
+  </script> 
+  <script type="text/javascript" src="js/jquery.blockUI.js"></script>
+  <script type="text/javascript" src="js/riversoft-core-lib.js"></script>
+  <script type="text/javascript" src="js/riversoft-validate-lib.js"></script>
+  <script>
+    /* lib 中已有預設值，有需自行設定才override
+  
+    // 設定：必填欄位檢查不通過時，會執行的callback
+    // labelName : 檢查不通過的第一個element的 「labelName」 attribute設定的值
+    window.requiredInvalidCallbackSetting(function(labelName) {
+      window.alert("「" + labelName + "」欄位必填!");
+    });
+    
+    // 設定：檢查到textarea欄位長度過長時，執行的callback
+    // labelName : 檢查不通過的第一個element的 「labelName」 attribute設定的值
+    // maxlength : 檢查不通過的第一個element的 「maxlength」 attribute設定的值
+    window.textareaTooLongCallbackSetting(function(labelName, maxlength) {
+      window.alert("「" + labelName + "」欄位文字過長!，不可超過" + maxlength + "個字");
+    });
+    */
+    
+    $(function() {
+      
+      // 點選click鈕
+      $("[name='click']").click(function() {
+        
+        $RS.AJAX.request({
+          url:"test.htm",
+          form:$("#formdiv")
+        });
+      });
+      
+      $RS.autocomplete($("[name='ipa7']"), {
+        source :[
+          {"value": {
+            "name" : "aa1",
+            "value" : "bb1"
+          }, "text": 'gaga1'
+           , "label": '<b>yaya1</b>'},
+          {"value": {
+            "name" : "aa2",
+            "value" : "bb2"
+          }, "text": 'gaga2'
+           , "label": '<b>yaya2</b>'}
+                 ]
+      });
+    });
+  </script>
+</head>
+<body>
+  <!-- constraint attribute可用的 value : required, date, number, time, upperCase, onlyEn，可合併使用，以空格(' ')隔開  -->
+  <!-- 例  constraint='upperCase onlyEn required' -->
+  <!-- labelName attribute : textarea及有constraint attribute的element一定要設定 labelName attribute -->
+  <form>
+    欄位a一：<input type="text" name="ipa1" constraint="required number" labelName="欄位a一"></input><br/>
+    欄位a二：<input type="text" name="ipa2" constraint="required date" labelName="欄位a二"></input><br/>
+    欄位a三：<input type="text" name="ipa3" constraint="required time" labelName="欄位a三"></input><br/>
+    欄位a四：<input type="text" name="ipa4" constraint="required upperCase" labelName="欄位a四"></input><br/>
+    欄位a五：<input type="radio" name="aaa[0].bbb[1].cc" value="1" constraint="required" labelName="欄位a五"></input>1
+    <input type="radio" name="aaa[0].bbb[1].cc" value="2" constraint="required" labelName="欄位a五"></input>2
+    <input type="radio" name="aaa[0].bbb[1].cc" value="3" constraint="required" labelName="欄位a五"></input>3<br/>
+    欄位a六：<textarea name="ipa5" maxlength="20" constraint="required" labelName="欄位a六"></textarea><br/>
+    欄位a七：<select constraint="required" labelName="欄位a七">
+      <option></option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select><br/>
+    <input type="text" name="ipa7"></input>
+    <input type="submit" name="submit" value="submit"/>
+  </form><br/>
+   
+  <div id="formdiv">
+    欄位b一：<input type="text" name="ipb1" constraint="required number" labelName="欄位b一"></input><br/>
+    欄位b二：<input type="text" name="ipb2" constraint="required date" labelName="欄位b二"></input><br/>
+    欄位b三：<input type="text" name="ipb3" constraint="required time" labelName="欄位b三"></input><br/>
+    欄位b四：<input type="text" name="ipb4" constraint="required upperCase" labelName="欄位b四"></input><br/>
+    欄位b五：<input type="radio" name="aaa[0].bbb[1].dd" value="1" constraint="required" labelName="欄位b五"></input>1
+    <input type="radio" name="aaa[0].bbb[1].dd" value="2" constraint="required" labelName="欄位b五"></input>2
+    <input type="radio" name="aaa[0].bbb[1].dd" value="3" constraint="required" labelName="欄位b五"></input>3<br/>
+    欄位b六：<textarea name="ipb5" maxlength="20" constraint="required" labelName="欄位b六"></textarea><br/>
+    欄位b七：<select constraint="required" labelName="欄位b七">
+      <option></option>
+      <option>1</option>
+      <option>2</option>
+      <option>3</option>
+      <option>4</option>
+    </select><br/>
+    <input type="button" name="click" value="click"></input>
+  </div><br/>
+</body>
+</html>
