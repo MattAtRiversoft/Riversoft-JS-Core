@@ -414,12 +414,12 @@
    * 自動完成
    * params : {
    *   url : required , String, action name
-   *   data : required, JSON, post參數
+   *   data : not required, JSON, post參數
    *   value(item) : required, Function, 定義要放進input bux的內容。參數說明：item:response的list中被選取的object
    *   itemFormat(item) : required, Function, 查詢結果顯示格示，會影響到response回來的list中的每一個object。參數說明：item:response的list中的各個object
    *   minLength : required, int, 查詢發動的字串最小長度
-   *   afterItemExists(item) : required, Function, 取得資料放入input中的動作。參數說明：item:response的list中被選取的object
-   *   afterItemNoExists() : required, Function, 清空input的動作。參數說明：無參數 
+   *   afterItemExists(item) : not required, Function, 取得資料放入input中的動作。參數說明：item:response的list中被選取的object
+   *   afterItemNoExists() : not required, Function, 清空input的動作。參數說明：無參數 
    *   cleanValueWhenNoItemMatched : not required, boolean, 沒對應的item時是否要執行value清空。預設true
    *   html : not required, boolean, dropdownlist是否使用html格式，請搭配jquery.ui.autocomplete.html.js。參考：http://github.com/scottgonzalez/jquery-ui-extensions
    *   其他 $.autocomplete參數也可傳入，可參考jquery ui官網，參數會覆蓋原本程式中的設定，
