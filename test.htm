@@ -43,16 +43,17 @@
       $RS.autocomplete($("[name='ipa7']"), {
         source :[
           {"value": {
-            "name" : "aa1",
-            "value" : "bb1"
-          }, "text": 'gaga1'
-           , "label": '<b>yaya1</b>'},
+            "itemName" : "aa1",
+            "itemValue" : "bb1"
+          }, "label": '<b>yaya1</b>'},
           {"value": {
-            "name" : "aa2",
-            "value" : "bb2"
-          }, "text": 'gaga2'
-           , "label": '<b>yaya2</b>'}
-                 ]
+            "itemName" : "aa2",
+            "itemValue" : "bb2"
+          }, "label": '<b>yaya2</b>'}
+                 ],
+        value : function(item) {
+          return item.itemValue;
+        }
       });
     });
   </script>

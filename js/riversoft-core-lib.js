@@ -57,41 +57,40 @@
     // }
     request : function(params) {
       
-      if (params.form == undefined || (params.form != undefined)) {
+      if (params.form != undefined) {
         
         if ($.isFunction($RS.requiredValidation)) {
           if (!$RS.requiredValidation(params.form)) {
             return;
           }
         }
-        
-        var allParams = {data : {}};
-        
-        if (!params.noblock) {
-          ajaxBeforeLoadingCallback();
-        }
-        
-        $.extend(allParams, this.defaultParams, params, {
-          complete : function(data, textStatus) {
-            
-            if (!params.noblock) {
-              ajaxAfterLoadingCallback();
-            }
-          }
-        });
-        
-        if (params.form != undefined) {
-          var formParams = formToJSON(params.form, {ignoreDisabled : params["ignoreDisabled"]});
-          $.extend(allParams.data,formParams);
-        }
-        
-        if (params.data != undefined) {
-          $.extend(allParams.data,params.data);
-        }
-        
-        return $.ajax(allParams);
       }
       
+      var allParams = {data : {}};
+      
+      if (!params.noblock) {
+        ajaxBeforeLoadingCallback();
+      }
+      
+      $.extend(allParams, this.defaultParams, params, {
+        complete : function(data, textStatus) {
+          
+          if (!params.noblock) {
+            ajaxAfterLoadingCallback();
+          }
+        }
+      });
+      
+      if (params.form != undefined) {
+        var formParams = formToJSON(params.form, {ignoreDisabled : params["ignoreDisabled"]});
+        $.extend(allParams.data,formParams);
+      }
+      
+      if (params.data != undefined) {
+        $.extend(allParams.data,params.data);
+      }
+      
+      return $.ajax(allParams);
     },
     // params = {
     //   url : ""
@@ -520,7 +519,7 @@
       },
       change : function(event, ui) {
 
-        if (!ui.item.value) {
+        if (!ui.item || !ui.item.value) {
           
           if (cleanValueWhenNoItemMatched) {
             target.val("");
