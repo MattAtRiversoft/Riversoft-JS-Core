@@ -129,21 +129,19 @@
       var elements = form.find("textarea");
       
       var hasTooLong = false;
-      var labelName = "";
-      var maxlength = "";
+      var labelNames = [];
+      var maxlengths = [];
       
       elements.each(function() {
         
         if ($(this).val().length > parseInt($(this).attr("maxlength"))) {
           hasTooLong = true;
-          if (maxlength == "") {
-            labelName = $(this).attr("labelName");
-            maxlength = $(this).attr("maxlength");
-          }
+          labelNames.push($(this).attr("labelName"));
+          maxlengths.push($(this).attr("maxlength"));
         }
       });
       if (hasTooLong) {
-        textareaTooLongCallback(labelName, maxlength);
+        textareaTooLongCallback(labelNames, maxlengths);
       }
       return hasTooLong;
     };
@@ -185,7 +183,7 @@
     });
     
     var isValid = true;
-    var labelName = "";
+    var labelNames = [];
     
     $.each(groups, function(k, v) {
       
@@ -207,14 +205,12 @@
       
       if (!notEmpty) {
         isValid = false;
-        if (labelName == "") {
-          labelName = v[0].attr("labelName");
-        }
+        labelNames.push(v[0].attr("labelName"));
       }
       
     });
     if (!isValid) {
-      requiredInvalidCallback(labelName); 
+      requiredInvalidCallback(labelNames); 
     }
     return isValid;
   };
@@ -225,11 +221,17 @@
   };
   
   // 執行必填檢查不通過時的callback
-  var requiredInvalidCallback = function(labelName) {
+  var requiredInvalidCallback = function(labelNames) {
     if ($.isFunction(this.requiredInvalidCallback)) {
-      this.requiredInvalidCallback(labelName);
+      this.requiredInvalidCallback(labelNames);
     } else { // 預設 window.alert 提示
-      window.alert("「" + labelName + "」 is required !");
+      
+      var text = "";
+      $.each(labelNames, function(k, labelName) {
+        text = text + "「" + labelName + "」,";
+      });
+      
+      window.alert(text + " is required !");
     }
   };
   
@@ -239,11 +241,21 @@
   };
   
   // 執行textarea長度檢查不通過時的callback
-  var textareaTooLongCallback = function(labelName, maxlength) {
+  var textareaTooLongCallback = function(labelNames, maxlengths) {
     if ($.isFunction(this.textareaTooLongCallback)) {
-      this.textareaTooLongCallback(labelName, maxlength);
+      this.textareaTooLongCallback(labelNames, maxlengths);
     } else { // 預設 window.alert 提示
-      window.alert("「" + labelName + "」 length is too long, max length is " + maxlength + "!");
+      
+      var text = "";
+      $.each(labelNames, function(i, labelName) {
+        
+        if (i > 0) {
+          text = text + "\n";
+        }
+        text = text + "「" + labelName + "」 length is too long, max length is " + maxlengths[i] + "!";
+      });
+      
+      window.alert(text);
     }
   };
   
