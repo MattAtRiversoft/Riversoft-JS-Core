@@ -14,18 +14,35 @@
   <script type="text/javascript" src="js/riversoft-validate-lib.js"></script>
   <script>
     /* lib 中已有預設值，有需自行設定才override
-  
     // 設定：必填欄位檢查不通過時，會執行的callback
-    // labelName : 檢查不通過的第一個element的 「labelName」 attribute設定的值
-    window.requiredInvalidCallbackSetting(function(labelName) {
-      window.alert("「" + labelName + "」欄位必填!");
+    // labelNames : 檢查不通過的所有element的 「labelName」 attribute設定的值 array
+    $RS.setRequiredInvalidCallback(function(labelNames) {
+      
+      var text = "";
+      $.each(labelNames, function(k, labelName) {
+        text = text + "「" + labelName + "」,";
+      });
+      
+      window.alert(text + " 欄位必填 !");
     });
+    */
     
+    /*
     // 設定：檢查到textarea欄位長度過長時，執行的callback
-    // labelName : 檢查不通過的第一個element的 「labelName」 attribute設定的值
-    // maxlength : 檢查不通過的第一個element的 「maxlength」 attribute設定的值
-    window.textareaTooLongCallbackSetting(function(labelName, maxlength) {
-      window.alert("「" + labelName + "」欄位文字過長!，不可超過" + maxlength + "個字");
+    // labelNames : 檢查不通過的所有element的 「labelName」 attribute設定的值 array
+    // maxlengths : 檢查不通過的所有element的 「maxlength」 attribute設定的值 array
+    $RS.setTextareaTooLongCallback(function(labelNames, maxlengths) {
+      
+      var text = "";
+      $.each(labelNames, function(i, labelName) {
+        
+        if (i > 0) {
+          text = text + "\n";
+        }
+        text = text + "「" + labelName + "」 內容長度, 最大長度為 " + maxlengths[i] + "!";
+      });
+      
+      window.alert(text);
     });
     */
     

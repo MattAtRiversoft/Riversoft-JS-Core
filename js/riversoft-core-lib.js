@@ -1,5 +1,7 @@
 (function($) {
 
+  var self = this;
+  
   /**
    * 如果流覽器不支援String.trim，為他加上trim
    */
@@ -558,14 +560,14 @@
   };
   
   // 設定AJAX、VIEW util發出ajax call之前的callback
-  var ajaxBeforeLoadingCallbackSetting = function(callback) {
-    this.ajaxBeforeLoadingCallback = callback;
+  var setAjaxBeforeLoadingCallback = function(callback) {
+    self.ajaxBeforeLoadingCallback = callback;
   };
   
   // 執行AJAX、VIEW util發出ajax call之前的callback
   var ajaxBeforeLoadingCallback = function() {
-    if ($.isFunction(this.ajaxBeforeLoadingCallback)) {
-      this.ajaxBeforeLoadingCallback();
+    if ($.isFunction(self.ajaxBeforeLoadingCallback)) {
+      self.ajaxBeforeLoadingCallback();
     } else { // 預設顯示 loading的文字 overlay 
       if ($(".blockUI:first").size() == 0) {
         
@@ -578,14 +580,14 @@
   };
 
   // 設定AJAX、VIEW util發出ajax call之後的callback
-  var ajaxAfterLoadingCallbackSetting = function(callback) {
-    this.ajaxAfterLoadingCallback = callback;
+  var setAjaxAfterLoadingCallback = function(callback) {
+    self.ajaxAfterLoadingCallback = callback;
   };
   
   // 執行AJAX、VIEW util發出ajax call之後的callback
   var ajaxAfterLoadingCallback = function() {
-    if ($.isFunction(this.ajaxAfterLoadingCallback)) {
-      this.ajaxAfterLoadingCallback();
+    if ($.isFunction(self.ajaxAfterLoadingCallback)) {
+      self.ajaxAfterLoadingCallback();
     } else { // 預設關閉 loading的文字 overlay
       $.unblockUI();
     }
@@ -622,9 +624,9 @@
   
   //---- 外部設定 start
   // 設定AJAX、VIEW util發出ajax call之前的callback
-  window.$RS.ajaxBeforeLoadingCallbackSetting = ajaxBeforeLoadingCallbackSetting;
+  window.$RS.setAjaxBeforeLoadingCallback = setAjaxBeforeLoadingCallback;
   // 設定AJAX、VIEW util發出ajax call之後的callback
-  window.$RS.ajaxAfterLoadingCallbackSetting = ajaxAfterLoadingCallbackSetting;
+  window.$RS.setAjaxAfterLoadingCallback = setAjaxAfterLoadingCallback;
   //---- 外部設定 end
 
 })(jQuery);

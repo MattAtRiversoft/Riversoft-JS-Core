@@ -1,5 +1,7 @@
 (function($) {
   
+  var self = this;
+  
   // 攔截所有submit，必須檢查必填，檢查通過才可繼續進行submit
   $("form").live("submit", function(e) {
     
@@ -216,14 +218,15 @@
   };
   
   // 設定必填檢查不通過時的callback
-  var requiredInvalidCallbackSetting = function(callback) {
-    this.requiredInvalidCallback = callback;
+  var setRequiredInvalidCallback = function(callback) {
+    self.requiredInvalidCallback = callback;
   };
   
   // 執行必填檢查不通過時的callback
   var requiredInvalidCallback = function(labelNames) {
-    if ($.isFunction(this.requiredInvalidCallback)) {
-      this.requiredInvalidCallback(labelNames);
+
+    if ($.isFunction(self.requiredInvalidCallback)) {
+      self.requiredInvalidCallback(labelNames);
     } else { // 預設 window.alert 提示
       
       var text = "";
@@ -236,14 +239,14 @@
   };
   
   // 設定textarea長度檢查不通過時的callback
-  var textareaTooLongCallbackSetting = function(callback) {
-    this.textareaTooLongCallback = callback;
+  var setTextareaTooLongCallback = function(callback) {
+    self.textareaTooLongCallback = callback;
   };
   
   // 執行textarea長度檢查不通過時的callback
   var textareaTooLongCallback = function(labelNames, maxlengths) {
-    if ($.isFunction(this.textareaTooLongCallback)) {
-      this.textareaTooLongCallback(labelNames, maxlengths);
+    if ($.isFunction(self.textareaTooLongCallback)) {
+      self.textareaTooLongCallback(labelNames, maxlengths);
     } else { // 預設 window.alert 提示
       
       var text = "";
@@ -290,9 +293,9 @@
 
   //---- 外部設定 start
   // 設定必填檢查不通過時的callback
-  window.$RS.requiredInvalidCallbackSetting = requiredInvalidCallbackSetting;
+  window.$RS.setRequiredInvalidCallback = setRequiredInvalidCallback;
   // 設定textarea長度檢查不通過時的callback
-  window.$RS.textareaTooLongCallbackSetting = textareaTooLongCallbackSetting;
+  window.$RS.setTextareaTooLongCallback = setTextareaTooLongCallback;
   //---- 外部設定 end
 
   // constraint attribute可用的 value : required, date, number, time, upperCase, onlyEn，可合併使用，以空格(' ')隔開
