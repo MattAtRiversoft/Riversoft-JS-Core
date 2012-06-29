@@ -14,6 +14,7 @@
   <script type="text/javascript" src="js/riversoft-validate-lib.js"></script>
   <script type="text/javascript" src="js/jquery.maskedinput-1.3.min.js"></script>
   <script type="text/javascript" src="js/riversoft-format-lib.js"></script>
+  <script type="text/javascript" src="js/riversoft-formater-register.js"></script>
   <script>
     /* lib 中已有預設值，有需自行設定才override
     // 設定：必填欄位檢查不通過時，會執行的callback
@@ -47,9 +48,6 @@
       window.alert(text);
     });
     */
-    
-    // 自訂義mask規則 reference: http://digitalbush.com/projects/masked-input-plugin/
-    $.mask.definitions['A']='[A-Z]';
     
     $(function() {
       
@@ -102,9 +100,9 @@
     </select><br/>
     欄位a八：<input type="text" name="ipa7" labelName="欄位a九"></input><br/>
     欄位a九：<textarea name="ipa9" maxlength="15" constraint="required" labelName="欄位a九"></textarea><br/>
-    欄位a十：<input type="text" name="ipa10" format="9999-99?-99" value="19811213"/><br/>
-    欄位a十一：<input type="text" name="ipa11" format="99:99" value="1503"/><br/>
-    欄位a十二：<input type="text" name="ipa11" format="A999999999" value="B224433441"/><br/>
+    欄位a十：<input type="text" name="ipa10" format="date" value="19811213"/><br/>
+    欄位a十一：<input type="text" name="ipa11" format="time" value="1503"/><br/>
+    欄位a十二：<input type="text" name="ipa11" format="idNumber" value="B224433441"/><br/>
     <input type="submit" name="submit" value="submit"/>
   </form><br/>
    
