@@ -83,8 +83,8 @@
   <!-- 例  constraint='upperCase onlyEn required' -->
   <!-- labelName attribute : textarea及有constraint attribute的element一定要設定 labelName attribute -->
   <form>
-    欄位a一：<input type="text" name="ipa1" constraint="required number" labelName="欄位a一"></input><br/>
-    欄位a二：<input type="text" name="ipa2" constraint="required date" labelName="欄位a二"></input><br/>
+    欄位a一：<input type="text" name="ipa1" constraint="required number" ignoreValidation="true" labelName="欄位a一"></input><br/>
+    欄位a二：<input type="text" name="ipa2" constraint="required date" ignoreValidation="true" labelName="欄位a二"></input><br/>
     欄位a三：<input type="text" name="ipa3" constraint="required time" labelName="欄位a三"></input><br/>
     欄位a四：<input type="text" name="ipa4" constraint="required upperCase" labelName="欄位a四"></input><br/>
     欄位a五：<input type="radio" name="aaa[0].bbb[1].cc" value="1" constraint="required" labelName="欄位a五"></input>1
@@ -107,8 +107,8 @@
   </form><br/>
    
   <div id="formdiv">
-    欄位b一：<input type="text" name="ipb1" constraint="required number" labelName="欄位b一"></input><br/>
-    欄位b二：<input type="text" name="ipb2" constraint="required date" labelName="欄位b二"></input><br/>
+    欄位b一：<input type="text" name="ipb1" constraint="required number" ignoreValidation="true" labelName="欄位b一"></input><br/>
+    欄位b二：<input type="text" name="ipb2" constraint="required date" ignoreValidation="true" labelName="欄位b二"></input><br/>
     欄位b三：<input type="text" name="ipb3" constraint="required time" labelName="欄位b三"></input><br/>
     欄位b四：<input type="text" name="ipb4" constraint="required upperCase" labelName="欄位b四"></input><br/>
     欄位b五：<input type="radio" name="aaa[0].bbb[1].dd" value="1" constraint="required" labelName="欄位b五"></input>1

@@ -152,7 +152,7 @@
       return false;
     }
     
-    var elements = form.find("[constraint~='required']");
+    var elements = form.find("[constraint~='required']:not([ignoreValidation='true'])");
 
     var groups = {};
     
