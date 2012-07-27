@@ -2,14 +2,23 @@
   
   var self = this;
   
-  // 攔截所有submit，必須檢查必填，檢查通過才可繼續進行submit
+  // 如果submit上有加上ignoreValidation='true'時，將外層對應的form加上ignoreValidation這個class name 用來判斷是否要忽略檢查必填
+  $("input[type='submit'][ignoreValidation='true']").live("click", function() {
+    $(this).closest("form").addClass("ignoreValidation");
+  });
+  
+  // 攔截所有submit，必須檢查必填，檢查通過才可繼續進行submit 如果form上有出現ignoreValidation時，不檢查必填
   $("form").live("submit", function(e) {
     
+    console.log($(this));
     var form = $(this);
     
-    if (!requiredValidation(form)) {
-      e.preventDefault();
+    if (!$(this).is(".ignoreValidation")) {
+      if (!requiredValidation(form)) {
+        e.preventDefault();
+      }
     }
+    $(this).removeClass("ignoreValidation");
   });
   
   // 檢查日期格式，不正確則清空欄位
@@ -152,7 +161,7 @@
       return false;
     }
     
-    var elements = form.find("[constraint~='required']:not([ignoreValidation='true'])");
+    var elements = form.find("[constraint~='required']");
 
     var groups = {};
     
