@@ -18,13 +18,6 @@
   
   $RS.VIEW.addBeforeLoad(beforeLoad);
 
-  $(function() {
-
-    // HTML的DOM完成後，要先執行一次beforeLoad
-    beforeLoad($("body"));
-    
-  });
-  
   $RS.addFormater = function(formater) {
     formaters.push(formater);
   };

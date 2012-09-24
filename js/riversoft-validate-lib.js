@@ -10,7 +10,6 @@
   // 攔截所有submit，必須檢查必填，檢查通過才可繼續進行submit 如果form上有出現ignoreValidation時，不檢查必填
   $("form").live("submit", function(e) {
     
-    console.log($(this));
     var form = $(this);
     
     if (!$(this).is(".ignoreValidation")) {
@@ -140,6 +139,7 @@
       var elements = form.find("textarea");
       
       var hasTooLong = false;
+      var invalidElements = [];
       var labelNames = [];
       var maxlengths = [];
       
@@ -147,12 +147,13 @@
         
         if ($(this).val().length > parseInt($(this).attr("maxlength"))) {
           hasTooLong = true;
+          invalidElements.push($(this));
           labelNames.push($(this).attr("labelName"));
           maxlengths.push($(this).attr("maxlength"));
         }
       });
       if (hasTooLong) {
-        textareaTooLongCallback(labelNames, maxlengths);
+        textareaTooLongCallback(labelNames, maxlengths, invalidElements);
       }
       return hasTooLong;
     };
@@ -194,6 +195,7 @@
     });
     
     var isValid = true;
+    var invalidElements = [];
     var labelNames = [];
     
     $.each(groups, function(k, v) {
@@ -216,12 +218,13 @@
       
       if (!notEmpty) {
         isValid = false;
+        invalidElements.push(v[0]);
         labelNames.push(v[0].attr("labelName"));
       }
       
     });
     if (!isValid) {
-      requiredInvalidCallback(labelNames); 
+      requiredInvalidCallback(labelNames, invalidElements); 
     }
     return isValid;
   };
@@ -232,16 +235,20 @@
   };
   
   // 執行必填檢查不通過時的callback
-  var requiredInvalidCallback = function(labelNames) {
+  var requiredInvalidCallback = function(labelNames, invalidElements) {
 
     if ($.isFunction(self.requiredInvalidCallback)) {
-      self.requiredInvalidCallback(labelNames);
+      self.requiredInvalidCallback(labelNames, invalidElements);
     } else { // 預設 window.alert 提示
       
       var text = "";
       $.each(labelNames, function(k, labelName) {
         text = text + "「" + labelName + "」,";
       });
+      
+      $("html, body").animate({
+        "scrollTop" : (invalidElements[0].offset().top) + "px"
+      }, "slow");
       
       window.alert(text + " is required !");
     }
@@ -253,9 +260,9 @@
   };
   
   // 執行textarea長度檢查不通過時的callback
-  var textareaTooLongCallback = function(labelNames, maxlengths) {
+  var textareaTooLongCallback = function(labelNames, maxlengths, invalidElements) {
     if ($.isFunction(self.textareaTooLongCallback)) {
-      self.textareaTooLongCallback(labelNames, maxlengths);
+      self.textareaTooLongCallback(labelNames, maxlengths, invalidElements);
     } else { // 預設 window.alert 提示
       
       var text = "";
@@ -266,6 +273,10 @@
         }
         text = text + "「" + labelName + "」 length is too long, max length is " + maxlengths[i] + "!";
       });
+
+      $("html, body").animate({
+        "scrollTop" : (invalidElements[0].offset().top) + "px"
+      }, "slow");
       
       window.alert(text);
     }
@@ -290,12 +301,6 @@
   };
   
   $RS.VIEW.addBeforeLoad(beforeLoad);
-
-  $(function() {
-
-    // 第一次使用傳統post取得的html要先執行一次beforeLoad
-    beforeLoad($("body"));
-  });
 
   window.$RS.requiredValidation = requiredValidation;
   window.$RS.beforeLoad = beforeLoad;

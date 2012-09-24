@@ -150,9 +150,19 @@
       
       this.beforeLoads.push(f);
     },
-    load : function(target, params) {
+    invokeBeforeLoad : function(context) {
       
       var self = this;
+      $.each(self.beforeLoads, function(i, f) {
+        
+        if ($.isFunction(f)) {
+          f(context);
+        }
+      });
+    },
+    load : function(target, params) {
+      
+      
       params = $.extend({
         success : function() {}
       }, params);
@@ -164,12 +174,7 @@
         success : function(data) {
           
           var rs = $(data);
-          $.each(self.beforeLoads, function(i, f) {
-            
-            if ($.isFunction(f)) {
-              f(rs);
-            }
-          });
+          invokeBeforeLoad(rs);
           target.html(rs);
           success(rs);
         }
@@ -605,7 +610,7 @@
   $(function() {
 
     // 第一次使用傳統post取得的html要先執行一次beforeLoad
-    beforeLoad($("body"));
+    VIEW.invokeBeforeLoad($("body"));
 
     // 檢查blockUI plugin有沒有使用，沒有則須提示
     if (!$.isFunction($.blockUI)) {
