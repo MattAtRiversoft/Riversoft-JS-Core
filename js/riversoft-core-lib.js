@@ -162,6 +162,7 @@
     },
     load : function(target, params) {
       
+      var self = this;
       
       params = $.extend({
         success : function() {}
@@ -174,7 +175,7 @@
         success : function(data) {
           
           var rs = $(data);
-          invokeBeforeLoad(rs);
+          self.invokeBeforeLoad(rs);
           target.html(rs);
           success(rs);
         }
