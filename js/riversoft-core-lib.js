@@ -1,5 +1,6 @@
-(function($) {
-
+(function ($) {
+  'use strict';
+    
   var self = this;
   
   /**
@@ -386,6 +387,7 @@
     return params;
   };
   
+    
   /**
    * 限定$.datepicker日期區間
    */
@@ -606,8 +608,133 @@
     
   };
   
+  /**
+   * 傳入 DOM id 的字串名稱即可
+   * 會自動啟用遮罩出現spinner
+   * 呼叫者要保留回傳的Spinner物件，並使用 .stop() 來終止
+   * 
+   */
+  var spin = function(elementIdString) {
+          
+    var opts = {
+      lines: 17 // The number of lines to draw
+    , length: 32 // The length of each line
+    , width: 31 // The line thickness
+    , radius: 9 // The radius of the inner circle
+    , scale: 1 // Scales overall size of the spinner
+    , corners: 1 // Corner roundness (0..1)
+    , color: '#000' // #rgb or #rrggbb or array of colors
+    , opacity: 0.3 // Opacity of the lines
+    , rotate: 0 // The rotation offset
+    , direction: 1 // 1: clockwise, -1: counterclockwise
+    , speed: 1 // Rounds per second
+    , trail: 55 // Afterglow percentage
+    , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+    , zIndex: 2e9 // The z-index (defaults to 2000000000)
+    , className: 'spinner' // The CSS class to assign to the spinner
+    , top: '50%' // Top position relative to parent
+    , left: '50%' // Left position relative to parent
+    , shadow: false // Whether to render a shadow
+    , hwaccel: false // Whether to use hardware acceleration
+    , position: 'absolute' // Element positioning
+    }
+    var target = document.getElementById(elementIdString)
+    var spinner = new Spinner(opts).spin(target);
+    return spinner;
+  };
+    
   VIEW.addBeforeLoad(beforeLoad);
 
+  var AnimationUtil = {};
+  
+  /**
+   * css class "content" 的div 物件之間，動態切換工具函示
+   * current: 目前顯示的div物件 
+   * to: 把currrent物件隱藏後，要顯示的div物件
+   */
+  var switchPanel = function(current, to, callback) {
+    
+    var $current = $(current);
+    var $to = $(to);
+    
+    $current.stop();        
+    $current.animate({
+      "top" : "-1000px"
+    }, {duration: "slow", complete: function() {
+        $to.animate({
+            "top" : "0px"
+        }, "slow");
+        if ($.isFunction(callback)) {
+        	callback();
+		}
+    }});
+  };
+  AnimationUtil.switchPanel = switchPanel;
+    
+  var cssForSwitchPanel = "<style> .content-hide {top:-1000px;} </style>";
+  $("head").append($(cssForSwitchPanel));
+  
+  var MSG = {};
+  
+  MSG.modelRef = null;
+  
+  var showMessiMessage = function(message, options) {
+    
+    return new Messi(message, options);
+  };
+  
+    /**
+    */
+  MSG.askThenDo = function(title, message, logicToDo) {
+			
+    return showMessiMessage(message, {title: title, buttons: [{id: 0, label:'Yes', val: 'Y'}, {id: 1, label: 'No', val: 'N'}], 
+        callback: function(val) {
+            if (val == 'Y'){
+                    logicToDo();		
+                }
+            }
+    });
+  };
+  
+  MSG.info = function(message, options) {
+    
+    if (Messi) {
+      var defaultOptions = {autoclose: 5000, center:true, viewport:{top:'50px',left:'30px'}};
+      if (options) {
+        $.extend(defaultOptions, options);
+      }
+      MSG.dismissModal();
+      return showMessiMessage(message, options);
+    }
+    else
+      alert(message);
+  };
+  
+  MSG.modal = function(message, options) {
+    
+    if (Messi) {
+      var modalOptions = {modal: true};
+      if (options) {
+        $.extend(options, modalOptions);
+      }
+      else {
+        options = modalOptions;
+      }
+      MSG.modelRef = showMessiMessage(message, options);
+      return MSG.modelRef; 
+    }
+    else
+      alert(message);
+  };
+  
+  MSG.dismissModal = function() {
+    
+    if (MSG.modelRef) {
+      MSG.modelRef.unload();
+      MSG.modelRef = null;
+    }
+  };
+    
   $(function() {
 
     // 第一次使用傳統post取得的html要先執行一次beforeLoad
@@ -627,7 +754,10 @@
   window.$RS.formToJSON = formToJSON;
   window.$RS.dateRange = dateRange;
   window.$RS.autocomplete = autocomplete;
-  
+  window.$RS.spin = spin;
+  window.$RS.AnimationUtil = AnimationUtil;
+  window.$RS.MSG = MSG;
+    
   //---- 外部設定 start
   // 設定AJAX、VIEW util發出ajax call之前的callback
   window.$RS.setAjaxBeforeLoadingCallback = setAjaxBeforeLoadingCallback;
