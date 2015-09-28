@@ -569,19 +569,22 @@
   
   // 設定AJAX、VIEW util發出ajax call之前的callback
   var setAjaxBeforeLoadingCallback = function(callback) {
-    self.ajaxBeforeLoadingCallback = callback;
+    $RS.ajaxBeforeLoadingCallback = callback;
   };
   
   // 執行AJAX、VIEW util發出ajax call之前的callback
   var ajaxBeforeLoadingCallback = function() {
-    if ($.isFunction(self.ajaxBeforeLoadingCallback)) {
-      self.ajaxBeforeLoadingCallback();
+    
+    if ($.isFunction($RS.ajaxBeforeLoadingCallback)) {
+      $RS.ajaxBeforeLoadingCallback();
     } else { // 預設顯示 loading的文字 overlay 
       if ($(".blockUI:first").size() == 0) {
         
+        $RS.spinRef = $RS.spin($("#spinContainer"), {left: '42%'});
         $.blockUI({
-          message : "loading", // 加上這個空白內容才不會顯示預設文字
-          overlayCSS : {background : "none", "z-index" : "2000"}
+          message : $("#loadingContainer"), // 加上這個空白內容才不會顯示預設文字
+          overlayCSS : {background : "#000", opacity: 0.3, cursor: "wait",  "z-index" : "2000"},
+          css: {border: 'none', padding: '15px', background : '#000', "border-radius": "7px", opacity: 0.8, color: '#fff'}
         });
       }
     }
@@ -589,13 +592,13 @@
 
   // 設定AJAX、VIEW util發出ajax call之後的callback
   var setAjaxAfterLoadingCallback = function(callback) {
-    self.ajaxAfterLoadingCallback = callback;
+    $RS.ajaxAfterLoadingCallback = callback;
   };
   
   // 執行AJAX、VIEW util發出ajax call之後的callback
   var ajaxAfterLoadingCallback = function() {
-    if ($.isFunction(self.ajaxAfterLoadingCallback)) {
-      self.ajaxAfterLoadingCallback();
+    if ($.isFunction($RS.ajaxAfterLoadingCallback)) {
+      $RS.ajaxAfterLoadingCallback();
     } else { // 預設關閉 loading的文字 overlay
       $.unblockUI();
     }
@@ -609,36 +612,46 @@
   };
   
   /**
-   * 傳入 DOM id 的字串名稱即可
+   * 傳入 DOM 物件或是jQuery object 的字串名稱即可
    * 會自動啟用遮罩出現spinner
    * 呼叫者要保留回傳的Spinner物件，並使用 .stop() 來終止
    * 
    */
-  var spin = function(elementIdString) {
-          
+  var spin = function(element, options) {
+    
+    options = options || {};
+    
     var opts = {
-      lines: 17 // The number of lines to draw
-    , length: 32 // The length of each line
-    , width: 31 // The line thickness
-    , radius: 9 // The radius of the inner circle
-    , scale: 1 // Scales overall size of the spinner
-    , corners: 1 // Corner roundness (0..1)
-    , color: '#000' // #rgb or #rrggbb or array of colors
-    , opacity: 0.3 // Opacity of the lines
-    , rotate: 0 // The rotation offset
-    , direction: 1 // 1: clockwise, -1: counterclockwise
-    , speed: 1 // Rounds per second
-    , trail: 55 // Afterglow percentage
-    , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
-    , zIndex: 2e9 // The z-index (defaults to 2000000000)
-    , className: 'spinner' // The CSS class to assign to the spinner
-    , top: '50%' // Top position relative to parent
-    , left: '50%' // Left position relative to parent
-    , shadow: false // Whether to render a shadow
-    , hwaccel: false // Whether to use hardware acceleration
-    , position: 'absolute' // Element positioning
-    }
-    var target = document.getElementById(elementIdString)
+        lines: 15 // The number of lines to draw
+      , length: 30 // The length of each line
+      , width: 9 // The line thickness
+      , radius: 42 // The radius of the inner circle
+      , scale: 0.25 // Scales overall size of the spinner
+      , corners: 1 // Corner roundness (0..1)
+      , color: '#fff' // #rgb or #rrggbb or array of colors
+      , opacity: 0.25 // Opacity of the lines
+      , rotate: 0 // The rotation offset
+      , direction: 1 // 1: clockwise, -1: counterclockwise
+      , speed: 1 // Rounds per second
+      , trail: 60 // Afterglow percentage
+      , fps: 20 // Frames per second when using setTimeout() as a fallback for CSS
+      , zIndex: 2e9 // The z-index (defaults to 2000000000)
+      , className: 'spinner' // The CSS class to assign to the spinner
+      , top: '50%' // Top position relative to parent
+      , left: '50%' // Left position relative to parent
+      , shadow: false // Whether to render a shadow
+      , hwaccel: false // Whether to use hardware acceleration
+      , position: 'absolute' // Element positioning
+    };
+    
+    $.extend(opts, options);
+    
+    var target;
+    if (element instanceof jQuery)
+      target = element.get(0);
+    else
+      target = element;
+    
     var spinner = new Spinner(opts).spin(target);
     return spinner;
   };
@@ -743,7 +756,10 @@
     // 檢查blockUI plugin有沒有使用，沒有則須提示
     if (!$.isFunction($.blockUI)) {
       window.alert("jquery.blockUI.js not exists");
-    }
+    };
+    
+    var loadingWithSpinner = "<div id='loadingContainer' style='display: none;'><div id='spinContainer'></div><span style='margin-left: 15%;'>背景處理中 ...</span></div>";
+    $("body").append($(loadingWithSpinner));
   });
   
   window.$RS = {};
